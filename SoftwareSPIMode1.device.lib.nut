@@ -144,5 +144,3 @@ class SoftwareSPIMode1 {
         return read_blob;
     }
 }
-                        //   sclk,          mosi,          miso
-PORT_SPI <- SoftwareSPI(hardware.pinU, hardware.pinN, hardware.pinL);  // CLOCK_IDLE_LOW | CLOCK_2ND_EDGE
