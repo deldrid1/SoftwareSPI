@@ -55,7 +55,8 @@ class SoftwareSPIMode0 {
 
         if (typeof data == "string") {
             local b = blob(data.len());
-            data = b.writestring(data);
+            b.writestring(data);
+            data = b
         }
 
         if (typeof data != "blob") throw ERROR_BAD_PARAMS_WRITE;
@@ -89,7 +90,8 @@ class SoftwareSPIMode0 {
         if (typeof data == "string") {
             rtnString = true;
             local b = blob(data_len);
-            data = b.writestring(data);
+            b.writestring(data);
+            data = b
         }
 
         if (typeof data != "blob") throw ERROR_BAD_PARAMS_WRITEREAD;
