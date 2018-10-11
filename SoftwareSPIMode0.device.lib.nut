@@ -23,9 +23,9 @@
 // THE SOFTWARE.
 
 // Big banging SPI class
-class SoftwareSPI {
+class SoftwareSPIMode0 {
 
-    static VERSION = "0.1.0";
+    static VERSION = "0.2.0";
 
     // Same as imp error messages
     static ERROR_BAD_PARAMS_WRITE     = "bad parameters to spi.write(data)";
@@ -40,13 +40,13 @@ class SoftwareSPI {
         _sclk = sclk;
         _mosi = mosi;
         _miso = miso;
-        
+
         // Configure pins
         _sclk.configure(DIGITAL_OUT, 0);
         _mosi.configure(DIGITAL_OUT, 0);
         _miso.configure(DIGITAL_IN);
     }
-    
+
     function write(data) {
         //Local variables to speed things up
         local cw = _sclk.write.bindenv(_sclk);
@@ -73,7 +73,7 @@ class SoftwareSPI {
         cw(0);
         return data.len();
     }
-    
+
     function writeread(data) {
         //Local variables to speed things up
         local cw = _sclk.write.bindenv(_sclk);
@@ -81,11 +81,11 @@ class SoftwareSPI {
         local dr = _miso.read.bindenv(_miso);
         local mask;
 
-        local read_val = 0; 
+        local read_val = 0;
         local data_len = data.len();
         local read_blob = blob(data_len);
         local rtnString = false;
-        
+
         if (typeof data == "string") {
             rtnString = true;
             local b = blob(data_len);
@@ -109,14 +109,14 @@ class SoftwareSPI {
         }
 
         cw(0);
-        
+
         if (rtnString) {
             return read_blob.tostring();
-        } else {    
+        } else {
             return read_blob;
         }
     }
-    
+
     function readstring (numChars) {
         return readblob(numChars).tostring();
     }

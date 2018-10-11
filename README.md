@@ -2,13 +2,13 @@
 
 This library provides software-based bit-bang SPI (Serial Peripheral Interface) that can be used as an alternative to the imp API’s [**hardware.spi**](https://developer.electricimp.com/api/hardware/spi) object. This class contains the same read and write methods as the imp API.
 
-**Note** The only supported SPI mode is currently 0 (CPOL 0, CPHA 0) with the most significant bit sent first. Clock speed cannot be configured when using this class. 
+**Note** This library only supported SPI modes 0 (CPOL 0, CPHA 0) and 1 (CPOL 0, CPHA 1) with the most significant bit sent first. Clock speed cannot be configured when using this class.
 
-**To add this library to your project, add** `#require "SoftwareSPI.device.lib.nut:0.1.0"` **to the top of your device code**
+**To add this library to your project, add** `#require "SoftwareSPIMode0.device.lib.nut:0.1.0"` or `#require "SoftwareSPIMode1.device.lib.nut:0.1.0"` **to the top of your device code**
 
-## Class Usage ## 
+## Class Usage ##
 
-### Constructor: SoftwareSpi(*sclk, mosi, miso*) ###
+### Constructor: SoftwareSpiMode**X**(*sclk, mosi, miso*) ###
 
 #### Parameters ####
 
@@ -18,23 +18,23 @@ This library provides software-based bit-bang SPI (Serial Peripheral Interface) 
 | *mosi* | imp **pin** object | Yes | The data output |
 | *miso* | imp **pin** object | Yes | The data input |
 
-Each of the imp **pin** objects will be configured by the class. 
+Each of the imp **pin** objects will be configured by the class.
 
-**Note** This class does not configure or toggle a chip-select pin. Your application should take care of this functionality. 
+**Note** This class does not configure or toggle a chip-select pin. Your application should take care of this functionality.
 
 ```squirrel
 local sclk = hardware.pinA; // Clock
-local mosi = hardware.pinB; // Master Output 
+local mosi = hardware.pinB; // Master Output
 local miso = hardware.pinC; // Master Input
 
-local sspi = SoftwareSPI(sclk, mosi, miso);
+local sspi = SoftwareSPIMode0(sclk, mosi, miso);
 ```
 
 ## Class Methods ##
 
 ### write(*data*) ###
 
-This method writes the specified data to the software SPI and returns the number of bytes written. 
+This method writes the specified data to the software SPI and returns the number of bytes written.
 
 #### Parameters ####
 
@@ -54,7 +54,7 @@ local cs = hardware.pinD;
 cs.configure(DIGITAL_OUT, 1);
 
 // Write data to a blob
-local value = blob(4); 
+local value = blob(4);
 value.writen(0xDEADBEEF, 'i');
 
 // Write data to SPI
