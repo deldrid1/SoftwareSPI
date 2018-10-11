@@ -80,6 +80,7 @@ class SoftwareSPIMode0 {
         local cw = _sclk.write.bindenv(_sclk);
         local dw = _mosi.write.bindenv(_mosi);
         local dr = _miso.read.bindenv(_miso);
+		local sleep = imp.sleep.bindenv(imp);
         local mask;
 
         local read_val = 0;
@@ -100,11 +101,10 @@ class SoftwareSPIMode0 {
             for(mask = 0x80; mask > 0; mask = mask >> 1) {
                 cw(0);
                 dw(byte & mask);
-                imp.sleep(0.000001);
+                sleep(0.000001);
                 // read the last byte
                 read_val = (read_val << 1) | (dr() ? 1 : 0);
                 cw(1);
-                imp.sleep(0.000001);
             }
             read_blob.writen(read_val, 'b');
             read_val = 0;
@@ -127,6 +127,8 @@ class SoftwareSPIMode0 {
         // Local variables to speed things up
         local cw = _sclk.write.bindenv(_sclk);
         local dr = _miso.read.bindenv(_miso);
+		local sleep = imp.sleep.bindenv(imp);
+
         local mask;
 
         local read_blob = blob(numChars);
@@ -135,10 +137,9 @@ class SoftwareSPIMode0 {
             local byte = 0;
             for (local b = 0; b < 8; b++) {
                 cw(0);
-                imp.sleep(0.000001);
+                sleep(0.000001) //allow some time for our slave to update its data //TODO: Is this necessary?
                 byte = (byte << 1) | (dr() ? 1 : 0);
                 cw(1);
-                imp.sleep(0.000001);
             }
             read_blob.writen(byte, 'b');
         }
